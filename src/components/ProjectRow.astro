@@ -1,0 +1,220 @@
+---
+export interface Project {
+  id: string;
+  legacySlug?: string;
+  theme?: 'dark' | 'light' | string;
+  client: string;
+  title: string;
+  tagline: string;
+  description: string;
+  role: string;
+  milestones?: string[];
+  additionalNotes?: string;
+  thumbnailUrl: string;
+  previewLoopUrl?: string;
+  videoSource: {
+    type: 'r2' | 'vimeo' | 'image' | string;
+    url?: string;
+    url720p?: string;
+    vimeoId?: string;
+  };
+  hasSubpage?: boolean;
+  subpageDeliverables?: Array<{
+    title: string;
+    format?: string;
+    videoUrl: string;
+    thumbnailUrl?: string;
+  }>;
+}
+
+interface Props {
+  project: Project;
+  index?: number;
+}
+
+const { project, index = 0 } = Astro.props;
+const isDark = project.theme ? project.theme === 'dark' : index % 2 === 0;
+const subpageHref = project.legacySlug ? `/${project.legacySlug}` : `/work/${project.id}`;
+const milestoneString =
+  project.milestones && project.milestones.length > 0
+    ? `${project.milestones.join(', ')}${project.additionalNotes ? ` (${project.additionalNotes})` : ''}`
+    : '';
+---
+
+<section
+  data-client={project.client}
+  class:list={[
+    'project-row relative z-10 w-full px-[2.73vw] pt-[2.73vw] pb-[3.3vw] transition-colors',
+    isDark ? 'bg-black text-white' : 'bg-white text-black',
+  ]}
+>
+  <!-- Row 1: "Work" Heading + Full-Width 2px Horizontal Rule -->
+  <div class="w-full pb-[20px]">
+    <h2
+      class:list={[
+        'font-display font-normal text-[22px] sm:text-[25px] leading-[1.4em] mb-[1.2vw]',
+        isDark ? 'text-white' : 'text-black',
+      ]}
+    >
+      Work
+    </h2>
+    <div
+      class:list={[
+        'w-full h-[2px]',
+        isDark ? 'bg-white' : 'bg-black',
+      ]}
+    ></div>
+  </div>
+
+  <!-- Row 2: Full-Width 16:9 Video Box (or Campaign Image) -->
+  <div
+    class="relative w-full aspect-video bg-black overflow-hidden group select-none"
+    data-wix-video-box
+  >
+    {project.videoSource.type !== 'image' && project.videoSource.url ? (
+      <>
+        <video
+          class="wix-spot-video w-full h-full object-cover cursor-pointer"
+          playsinline
+          muted
+          loop
+          preload="metadata"
+          poster={project.thumbnailUrl}
+        >
+          <source src={project.videoSource.url} type="video/mp4" />
+          {project.videoSource.url720p && (
+            <source src={project.videoSource.url720p} type="video/mp4" />
+          )}
+        </video>
+
+        <!-- Center Play/Pause Toggle Overlay (matches Wix VideoBox #comp-m2rtf2734) -->
+        <button
+          type="button"
+          class="video-play-toggle absolute inset-0 m-auto w-[68px] h-[68px] flex items-center justify-center rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200 pointer-events-auto"
+          aria-label={`Play or pause ${project.client} ${project.title}`}
+        >
+          <!-- Pause Bars (shown when playing) -->
+          <svg class="pause-icon w-10 h-10" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <rect x="13" y="10" width="5" height="20" fill="white" />
+            <rect x="22" y="10" width="5" height="20" fill="white" />
+          </svg>
+          <!-- Play Triangle (shown when paused) -->
+          <svg class="play-icon w-10 h-10 hidden" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="14,10 30,20 14,30" fill="white" />
+          </svg>
+        </button>
+
+        <!-- Bottom-Right Audio Mute/Unmute Button (matches Wix VideoBox #comp-m2rtf277) -->
+        <button
+          type="button"
+          class="video-mute-toggle absolute bottom-3 right-3 z-20 w-11 h-11 flex items-center justify-center text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] hover:scale-105 transition"
+          aria-label="Toggle audio mute"
+          data-muted="true"
+        >
+          <!-- Muted Icon (default) -->
+          <svg class="mute-icon w-[30px] h-[30px]" viewBox="0 0 30 30" fill="currentColor">
+            <path d="M16.5 7.5L11 12H7v6h4l5.5 4.5V7.5zM23.5 12.2l-1.4-1.4-2.6 2.6-2.6-2.6-1.4 1.4 2.6 2.6-2.6 2.6 1.4 1.4 2.6-2.6 2.6 2.6 1.4-1.4-2.6-2.6 2.6-2.6z" />
+          </svg>
+          <!-- Unmuted Icon -->
+          <svg class="unmute-icon w-[30px] h-[30px] hidden" viewBox="0 0 30 30" fill="currentColor">
+            <path d="M16.5 7.5L11 12H7v6h4l5.5 4.5V7.5zm3.5 3.2v1.8c1.5.7 2.5 2.2 2.5 4s-1 3.3-2.5 4v1.8c2.4-.8 4-3 4-5.8s-1.6-5-4-5.8z" />
+          </svg>
+        </button>
+      </>
+    ) : (
+      <img
+        src={project.thumbnailUrl}
+        alt={`${project.client} "${project.title}"`}
+        loading="lazy"
+        class="w-full h-full object-cover"
+      />
+    )}
+  </div>
+
+  <!-- Row 3: 2-Column Split (0.69fr Left / 1.31fr Right with 2px Vertical Divider) -->
+  <div class="grid grid-cols-1 md:grid-cols-[0.69fr_1.31fr] pt-[20px] md:pt-[1.56vw] gap-8 md:gap-0 items-stretch">
+    <!-- Left Column: Client Name (44px Bold Familjen Grotesk) + Spot Title (16px Helvetica Roman) + More Button -->
+    <div class="flex flex-col justify-start pr-4 md:pt-[1.2vw]">
+      <h3
+        class:list={[
+          'font-display font-bold text-[34px] sm:text-[44px] leading-[1em] tracking-normal',
+          isDark ? 'text-white' : 'text-black',
+        ]}
+      >
+        <span>{project.client}&nbsp;</span>
+        <span
+          class:list={[
+            'font-sans font-normal text-[16px] leading-[1.4em] align-middle',
+            isDark ? 'text-white' : 'text-black',
+          ]}
+        >
+          "{project.title}"
+        </span>
+      </h3>
+
+      {project.hasSubpage && (
+        <div class="mt-6 sm:mt-8">
+          <a
+            href={subpageHref}
+            class:list={[
+              'inline-flex items-center justify-center w-[150px] sm:w-[190px] aspect-[1/0.294] border font-sans font-normal text-[16px] leading-[1.4em] rounded-none transition-colors duration-300',
+              isDark
+                ? 'border-white text-white hover:bg-white hover:text-black'
+                : 'border-black text-black hover:bg-black hover:text-white',
+            ]}
+          >
+            More
+          </a>
+        </div>
+      )}
+    </div>
+
+    <!-- Right Column: 2px Vertical Line + Tagline (44px Bold Familjen Grotesk) + Description (20px Rubik Light) + Milestones (16px Helvetica Roman) -->
+    <div class="relative flex items-stretch">
+      <!-- 2px Vertical Divider Line on Desktop (matches #comp-m52xpr1r) -->
+      <div
+        aria-hidden="true"
+        class:list={[
+          'hidden md:block w-[2px] shrink-0 self-end h-[95%]',
+          isDark ? 'bg-white' : 'bg-black',
+        ]}
+      ></div>
+
+      <div class="w-full md:w-[85%] md:ml-auto md:mr-[4.4%] pt-1 md:pt-[1.3vw]">
+        <p
+          class:list={[
+            'font-display font-bold text-[32px] sm:text-[44px] leading-[1em] uppercase mb-6',
+            isDark ? 'text-white' : 'text-black',
+          ]}
+        >
+          {project.tagline}
+        </p>
+
+        <p
+          class:list={[
+            'font-body font-light text-[18px] sm:text-[20px] leading-[1.4em] mb-6',
+            isDark ? 'text-white' : 'text-black',
+          ]}
+        >
+          {project.description}
+        </p>
+
+        {milestoneString && (
+          <p
+            class:list={[
+              'font-sans text-[16px] leading-[1.4em]',
+              isDark ? 'text-white' : 'text-black',
+            ]}
+          >
+            <span class="font-sans font-normal uppercase">
+              PRODUCED THE FOLLOWING MILESTONES AS {project.role.toUpperCase()}:{' '}
+            </span>
+            <span class="font-body font-light">
+              {milestoneString}
+            </span>
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

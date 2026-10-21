@@ -1,0 +1,20 @@
+{
+  "name": "christopher-frendo-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Custom Astro + Tailwind CSS portfolio for Christopher Frendo (Senior Producer & Director), powered by Cloudflare R2 / Stream / Vimeo video delivery.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "transcode": "bash ./scripts/transcode-videos.sh"
+  },
+  "dependencies": {
+    "astro": "^7.4.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "CHRISTOPHER FRENDO",
+  "role": "SENIOR PRODUCER",
+  "domain": "https://www.christopherfrendo.com",
+  "mediaBaseUrl": "https://media.christopherfrendo.com",
+  "heroVideoUrl": "https://video.wixstatic.com/video/899cf4_787a58e73bf8400583e203703205c4bb/1080p/mp4/file.mp4",
+  "heroPosterUrl": "https://static.wixstatic.com/media/899cf4_787a58e73bf8400583e203703205c4bbf000.jpg",
+  "contactImageUrl": "https://static.wixstatic.com/media/899cf4_3a371ddeb4444f6394322c473197a925~mv2.png",
+  "copyright": "COPYRIGHT 2024 CHRISTOPHER FRENDO",
+  "navigation": [
+    { "label": "Producing", "href": "/" },
+    { "label": "Directing", "href": "/directing" },
+    { "label": "Testimonials", "href": "/testimonials" },
+    { "label": "Hobbies", "href": "/hobbies" }
+  ],
+  "socials": [
+    { "label": "Instagram", "href": "https://www.instagram.com/frendonics/" },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/christopher-frendo-55033610/" },
+    { "label": "YouTube", "href": "https://www.youtube.com/@christopherfrendo" },
+    { "label": "TikTok", "href": "https://www.tiktok.com/@christopherfrendo" }
+  ]
+}

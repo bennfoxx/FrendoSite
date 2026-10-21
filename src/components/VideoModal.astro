@@ -1,0 +1,122 @@
+---
+// High-res lightbox modal player supporting Cloudflare R2 MP4 urls and Vimeo embeds
+---
+
+<div
+  id="video-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="video-modal-title"
+>
+  <div class="relative w-full max-w-5xl">
+    <div class="flex items-center justify-between mb-3">
+      <h3 id="video-modal-title" class="text-xs sm:text-sm uppercase tracking-widest text-neutral-300 font-semibold">
+        Spot Playback
+      </h3>
+      <button
+        id="video-modal-close"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs uppercase tracking-widest text-neutral-300 hover:text-white border border-neutral-700 hover:border-white rounded transition"
+      >
+        <span>Close (ESC)</span>
+      </button>
+    </div>
+
+    <div
+      id="video-modal-stage"
+      class="aspect-video w-full bg-neutral-950 rounded-lg overflow-hidden border border-neutral-800 shadow-2xl flex items-center justify-center"
+    >
+      <!-- Dynamically populated with <video> or Vimeo <iframe> on click -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('video-modal');
+  const stage = document.getElementById('video-modal-stage');
+  const titleEl = document.getElementById('video-modal-title');
+  const closeBtn = document.getElementById('video-modal-close');
+
+  function openModal(type: string, url: string, vimeoId: string, title: string) {
+    if (!modal || !stage || !titleEl) return;
+    titleEl.textContent = title || 'Spot Playback';
+    stage.innerHTML = '';
+
+    if (type === 'vimeo' && vimeoId) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`;
+      iframe.className = 'w-full h-full';
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      stage.appendChild(iframe);
+    } else if (url) {
+      const video = document.createElement('video');
+      video.src = url;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.className = 'w-full h-full object-contain bg-black';
+      stage.appendChild(video);
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    if (!modal || !stage) return;
+    stage.innerHTML = '';
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.open-video-modal').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const el = btn as HTMLElement;
+      openModal(
+        el.dataset.videoType || 'r2',
+        el.dataset.videoUrl || '',
+        el.dataset.vimeoId || '',
+        el.dataset.videoTitle || ''
+      );
+    });
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // Optional 4-second muted hover preview loop activation
+  document.querySelectorAll('[data-video-container]').forEach((container) => {
+    const el = container as HTMLElement;
+    const loopUrl = el.dataset.previewLoop;
+    const hoverVideo = el.querySelector('.hover-loop-video') as HTMLVideoElement | null;
+    const masterVideo = el.querySelector('.master-video') as HTMLVideoElement | null;
+    if (!loopUrl || !hoverVideo) return;
+
+    let loaded = false;
+    el.addEventListener('mouseenter', () => {
+      if (masterVideo && !masterVideo.paused) return;
+      if (!loaded) {
+        hoverVideo.src = loopUrl;
+        loaded = true;
+      }
+      hoverVideo.classList.remove('hidden');
+      hoverVideo.play().catch(() => {});
+    });
+
+    el.addEventListener('mouseleave', () => {
+      hoverVideo.pause();
+      hoverVideo.classList.add('hidden');
+    });
+  });
+</script>

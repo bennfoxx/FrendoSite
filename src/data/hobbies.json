@@ -1,0 +1,77 @@
+{
+  "intro": "My happy place is when I get to be outdoors and do two things I really love, hiking and photography. Astrophotography is something I am trying to get better at as well as portrait photography. I also enjoyed being behind the camera instead of being in front of it. In a world where selfies are dominating the gram, I encourage people to turn the phone around and see the world beyond themselves.",
+  "photos": [
+    {
+      "id": "astro-milky-way",
+      "title": "Night Sky & Astrophotography",
+      "category": "Astrophotography",
+      "aspect": "aspect-[4/5]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/astro-milky-way.webp",
+      "caption": "Long-exposure night sky study far from city light pollution."
+    },
+    {
+      "id": "hiking-ridge-sunrise",
+      "title": "Blue Ridge Summit Trail",
+      "category": "Hiking & Outdoors",
+      "aspect": "aspect-[16/10]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/hiking-ridge-sunrise.webp",
+      "caption": "Early morning ridge hike above the valley fog."
+    },
+    {
+      "id": "portrait-natural-light",
+      "title": "Environmental Portrait Study",
+      "category": "Portraiture",
+      "aspect": "aspect-[3/4]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/portrait-natural-light.webp",
+      "caption": "Natural light environmental portrait."
+    },
+    {
+      "id": "astro-deep-sky",
+      "title": "Deep Sky Star Trails",
+      "category": "Astrophotography",
+      "aspect": "aspect-square",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/astro-deep-sky.webp",
+      "caption": "Tracked exposure capturing celestial motion across the horizon."
+    },
+    {
+      "id": "backcountry-falls",
+      "title": "Backcountry Cascades",
+      "category": "Hiking & Outdoors",
+      "aspect": "aspect-[4/5]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/backcountry-falls.webp",
+      "caption": "Long-shutter water movement along a backcountry trail."
+    },
+    {
+      "id": "golden-hour-portrait",
+      "title": "Golden Hour Character Study",
+      "category": "Portraiture",
+      "aspect": "aspect-[16/10]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/golden-hour-portrait.webp",
+      "caption": "Backlit golden hour portrait captured on location."
+    },
+    {
+      "id": "alpine-lake",
+      "title": "High Altitude Reflection",
+      "category": "Hiking & Outdoors",
+      "aspect": "aspect-[3/4]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/alpine-lake.webp",
+      "caption": "Still morning water reflecting alpine peaks."
+    },
+    {
+      "id": "lunar-eclipse-study",
+      "title": "Telephoto Lunar Detail",
+      "category": "Astrophotography",
+      "aspect": "aspect-square",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/lunar-eclipse-study.webp",
+      "caption": "High-focal-length lunar surface detail."
+    },
+    {
+      "id": "canyon-overlook",
+      "title": "Desert Canyon Overlook",
+      "category": "Hiking & Outdoors",
+      "aspect": "aspect-[16/9]",
+      "imageUrl": "https://media.christopherfrendo.com/hobbies/canyon-overlook.webp",
+      "caption": "Last light across sandstone canyon walls."
+    }
+  ]
+}

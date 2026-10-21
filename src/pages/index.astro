@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import ContactForm from '../components/ContactForm.astro';
+import projects from '../data/projects.json';
+import site from '../data/site.json';
+---
+
+<BaseLayout
+  title="Christopher Frendo"
+  description="Senior Producer II portfolio of Christopher Frendo featuring 29+ commercial spots for Solo Stove, CarMax, GEICO, Papa John's, Old El Paso, Miracle-Gro, Donate Life, Penske, and Google x McLaren."
+  fullBleed={true}
+>
+  <!-- Sticky 100vh Hero Sizzle Video (Project sections swipe/scroll up over this video, matching #comp-m2rtf262 on christopherfrendo.com) -->
+  <section
+    aria-label="Featured Sizzle Reel"
+    class="relative md:sticky md:top-0 z-0 w-full md:min-h-screen bg-black overflow-hidden"
+  >
+    <div class="w-full aspect-video md:aspect-auto md:h-screen relative">
+      <video
+        id="hero-sizzle-video"
+        class="w-full h-full object-cover"
+        src={site.heroVideoUrl}
+        poster={site.heroPosterUrl}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      ></video>
+    </div>
+  </section>
+
+  <!-- Full-Bleed Alternating Dark/Light Project Sections that Swipe Over the Sticky Hero Reel -->
+  <div class="relative z-10 w-full">
+    {projects.map((project, index) => (
+      <ProjectRow project={project} index={index} />
+    ))}
+  </div>
+
+  <!-- Contact Section at Bottom of Homepage -->
+  <ContactForm />
+</BaseLayout>
+
+<script>
+  // Autoplay/pause project videos as they enter/leave viewport & wire up Play/Pause and Mute/Unmute controls
+  const videoBoxes = document.querySelectorAll('[data-wix-video-box]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target.querySelector('video') as HTMLVideoElement | null;
+        if (!video) return;
+
+        if (entry.isIntersecting) {
+          if (video.dataset.userPaused !== 'true') {
+            video.play().catch(() => {});
+          }
+        } else {
+          video.pause();
+        }
+      });
+    },
+    { threshold: 0.25 }
+  );
+
+  videoBoxes.forEach((box) => {
+    const video = box.querySelector('video') as HTMLVideoElement | null;
+    const playToggle = box.querySelector('.video-play-toggle') as HTMLButtonElement | null;
+    const pauseIcon = box.querySelector('.pause-icon') as SVGElement | null;
+    const playIcon = box.querySelector('.play-icon') as SVGElement | null;
+    const muteToggle = box.querySelector('.video-mute-toggle') as HTMLButtonElement | null;
+    const muteIcon = box.querySelector('.mute-icon') as SVGElement | null;
+    const unmuteIcon = box.querySelector('.unmute-icon') as SVGElement | null;
+
+    if (!video) return;
+    observer.observe(box);
+
+    function syncPlayIcons() {
+      if (!video) return;
+      if (video.paused) {
+        pauseIcon?.classList.add('hidden');
+        playIcon?.classList.remove('hidden');
+      } else {
+        pauseIcon?.classList.remove('hidden');
+        playIcon?.classList.add('hidden');
+      }
+    }
+
+    function togglePlay() {
+      if (!video) return;
+      if (video.paused) {
+        video.dataset.userPaused = 'false';
+        video.play().catch(() => {});
+      } else {
+        video.dataset.userPaused = 'true';
+        video.pause();
+      }
+      syncPlayIcons();
+    }
+
+    video.addEventListener('click', togglePlay);
+    playToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlay();
+    });
+    video.addEventListener('play', syncPlayIcons);
+    video.addEventListener('pause', syncPlayIcons);
+
+    muteToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      if (video.muted) {
+        muteIcon?.classList.remove('hidden');
+        unmuteIcon?.classList.add('hidden');
+      } else {
+        muteIcon?.classList.add('hidden');
+        unmuteIcon?.classList.remove('hidden');
+      }
+    });
+  });
+</script>

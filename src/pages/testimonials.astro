@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import testimonials from '../data/testimonials.json';
+
+function getInitials(name: string) {
+  return name
+    .replace(/^Dr\.\s+/i, '')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
+}
+---
+
+<BaseLayout
+  title="Testimonials | Christopher Frendo"
+  description="Client, agency, and colleague endorsements from Arnold Worldwide, The Martin Agency, SuperJoy, Fatbird Creative, US Army FASTC, and Cribl."
+>
+  <section class="pt-12 pb-8 border-b border-neutral-800">
+    <p class="text-xs uppercase tracking-[0.25em] text-neutral-400 mb-2">
+      Client & Colleague Endorsements ({testimonials.length})
+    </p>
+    <h1 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-wider text-white">
+      Testimonials
+    </h1>
+  </section>
+
+  <section class="py-12 columns-1 md:columns-2 gap-8 space-y-8">
+    {testimonials.map((item) => (
+      <article class="break-inside-avoid bg-neutral-900/50 border border-neutral-800 rounded-lg p-6 sm:p-8 flex flex-col justify-between space-y-6 hover:border-neutral-700 transition">
+        <div class="space-y-4">
+          {item.quote.split('\n\n').map((paragraph) => (
+            <p class="text-neutral-300 text-sm leading-relaxed">
+              "{paragraph}"
+            </p>
+          ))}
+        </div>
+
+        <div class="flex items-center gap-4 pt-4 border-t border-neutral-800/80">
+          <div class="relative w-12 h-12 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden shrink-0">
+            <span class="text-xs font-bold tracking-wider text-neutral-300 select-none">
+              {getInitials(item.name)}
+            </span>
+            {item.avatarUrl && (
+              <img
+                src={item.avatarUrl}
+                alt={item.name}
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-cover"
+                onerror="this.style.display='none'"
+              />
+            )}
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white tracking-wide">
+              {item.name}
+            </h2>
+            <p class="text-xs text-neutral-400">
+              {item.role}
+              {item.company ? ` — ${item.company}` : ''}
+            </p>
+          </div>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

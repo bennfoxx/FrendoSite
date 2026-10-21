@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import projects from '../../data/projects.json';
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { id: string }; props: { project: (typeof projects)[number] } }> = [];
+
+  for (const project of projects) {
+    paths.push({
+      params: { id: project.id },
+      props: { project },
+    });
+
+    // Also generate short legacy slug under /work/[legacySlug] (e.g. /work/bluntmarketing)
+    if (project.legacySlug && project.legacySlug !== project.id) {
+      paths.push({
+        params: { id: project.legacySlug },
+        props: { project },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout
+  title={`${project.client} — "${project.title}" | Christopher Frendo`}
+  description={project.description}
+>
+  <section class="pt-10 pb-8 border-b border-neutral-800">
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400 hover:text-white transition mb-6"
+    >
+      <span>← Back to Producing</span>
+    </a>
+
+    <p class="text-xs uppercase tracking-[0.25em] text-neutral-400 mb-2">
+      {project.client} — "{project.title}"
+    </p>
+    <h1 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-wider text-white mb-4">
+      {project.tagline}
+    </h1>
+    <p class="max-w-3xl text-neutral-300 text-sm sm:text-base leading-relaxed">
+      {project.description}
+    </p>
+
+    {project.milestones && project.milestones.length > 0 && (
+      <div class="pt-6">
+        <span class="text-xs font-semibold uppercase text-neutral-500 block mb-2">
+          Produced Milestones ({project.role}):
+        </span>
+        <div class="flex flex-wrap gap-1.5">
+          {project.milestones.map((item) => (
+            <span class="px-2.5 py-1 text-xs bg-neutral-800 text-neutral-200 rounded border border-neutral-700/50">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+
+  <!-- Hero Master Spot -->
+  <section class="py-12 border-b border-neutral-800">
+    <h2 class="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-4 font-semibold">
+      Primary Broadcast / Campaign Master
+    </h2>
+    <div class="relative aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800 shadow-2xl">
+      <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-neutral-900 via-neutral-950 to-black pointer-events-none select-none z-0">
+        <span class="text-xs uppercase tracking-[0.25em] text-neutral-500 mb-1">
+          {project.client}
+        </span>
+        <span class="font-display text-2xl font-bold uppercase tracking-wider text-neutral-300">
+          "{project.title}" — Master Spot
+        </span>
+      </div>
+      <video
+        class="relative z-10 w-full h-full object-cover"
+        controls
+        preload="none"
+        playsinline
+        poster={project.thumbnailUrl}
+      >
+        <source src={project.videoSource.url} type="video/mp4" />
+      </video>
+    </div>
+  </section>
+
+  <!-- Additional Campaign Deliverables (Times Square OOH, Social Cutdowns, Case Studies) -->
+  {project.subpageDeliverables && project.subpageDeliverables.length > 0 && (
+    <section class="py-12">
+      <h2 class="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8 font-semibold">
+        Additional Campaign Deliverables ({project.subpageDeliverables.length})
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {project.subpageDeliverables.map((deliverable) => (
+          <article class="bg-neutral-900/40 border border-neutral-800 rounded-lg overflow-hidden">
+            <div class="relative aspect-video bg-neutral-900 overflow-hidden">
+              <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-neutral-900 via-neutral-950 to-black pointer-events-none select-none z-0">
+                <span class="text-[11px] uppercase tracking-widest text-neutral-400">
+                  {deliverable.title}
+                </span>
+              </div>
+              <video
+                class="relative z-10 w-full h-full object-cover"
+                controls
+                preload="none"
+                playsinline
+                poster={deliverable.thumbnailUrl || project.thumbnailUrl}
+              >
+                <source src={deliverable.videoUrl} type="video/mp4" />
+              </video>
+            </div>
+            <div class="p-4 flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-bold text-white">
+                  {deliverable.title}
+                </h3>
+                {deliverable.format && (
+                  <p class="text-xs text-neutral-400 mt-0.5">
+                    {deliverable.format}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                class="open-video-modal px-3 py-1.5 border border-neutral-700 hover:border-white text-[11px] uppercase tracking-wider text-neutral-300 hover:text-white rounded transition"
+                data-video-type="r2"
+                data-video-url={deliverable.videoUrl}
+                data-video-title={`${project.client} — ${deliverable.title}`}
+              >
+                Theater
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>

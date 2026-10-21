@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import hobbies from '../data/hobbies.json';
+---
+
+<BaseLayout
+  title="Hobbies | Christopher Frendo"
+  description="Outdoor hiking, astrophotography, and natural light portrait photography by Christopher Frendo."
+>
+  <section class="pt-12 pb-10 border-b border-neutral-800">
+    <p class="text-xs uppercase tracking-[0.25em] text-neutral-400 mb-2">
+      Life Behind The Lens
+    </p>
+    <h1 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-wider text-white mb-6">
+      Hobbies
+    </h1>
+    <p class="max-w-3xl text-neutral-300 text-base sm:text-lg leading-relaxed">
+      {hobbies.intro}
+    </p>
+  </section>
+
+  <!-- Masonry Photo Gallery -->
+  <section class="py-12 columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+    {hobbies.photos.map((photo) => (
+      <figure class="break-inside-avoid group relative overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900">
+        <div class:list={['w-full relative overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900 flex items-center justify-center', photo.aspect]}>
+          <div class="text-center p-6 select-none">
+            <span class="text-[10px] uppercase tracking-[0.25em] text-neutral-500 block mb-1">
+              {photo.category}
+            </span>
+            <span class="font-display text-lg uppercase tracking-wider text-neutral-300">
+              {photo.title}
+            </span>
+          </div>
+          <img
+            src={photo.imageUrl}
+            alt={photo.title}
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onerror="this.style.display='none'"
+          />
+        </div>
+        <figcaption class="p-4 bg-neutral-950/90 border-t border-neutral-800/80">
+          <span class="text-[10px] uppercase tracking-widest text-neutral-500 block">
+            {photo.category}
+          </span>
+          <p class="text-xs text-neutral-300 mt-1">
+            {photo.caption}
+          </p>
+        </figcaption>
+      </figure>
+    ))}
+  </section>
+</BaseLayout>

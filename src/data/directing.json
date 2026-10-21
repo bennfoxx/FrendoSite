@@ -1,0 +1,58 @@
+[
+  {
+    "id": "wixom-ranch",
+    "client": "Wixom Ranch",
+    "title": "Wixom Ranch",
+    "role": "Director",
+    "tagline": "CINEMATIC STORYTELLING IN THE HEARTLAND.",
+    "description": "Directed on location with natural light and dynamic movement to capture the authentic character and craft of Wixom Ranch.",
+    "thumbnailUrl": "https://media.christopherfrendo.com/thumbs/directing-wixom-ranch.webp",
+    "previewLoopUrl": "https://media.christopherfrendo.com/loops/directing-wixom-ranch-loop.mp4",
+    "videoSource": {
+      "type": "r2",
+      "url": "https://media.christopherfrendo.com/masters/directing-wixom-ranch-1080p.mp4"
+    }
+  },
+  {
+    "id": "surreal-glass-flowers",
+    "client": "Surreal Glass Flowers",
+    "title": "Surreal Glass Flowers",
+    "role": "Director",
+    "tagline": "MACRO OPTICS & LIGHT.",
+    "description": "High-detail macro cinematography exploring the delicate textures, refractions, and artistry of handcrafted glass botanicals.",
+    "thumbnailUrl": "https://media.christopherfrendo.com/thumbs/directing-surreal-glass-flowers.webp",
+    "previewLoopUrl": "https://media.christopherfrendo.com/loops/directing-surreal-glass-flowers-loop.mp4",
+    "videoSource": {
+      "type": "r2",
+      "url": "https://media.christopherfrendo.com/masters/directing-surreal-glass-flowers-1080p.mp4"
+    }
+  },
+  {
+    "id": "redford-naturals",
+    "client": "Redford Naturals",
+    "title": "Redford Naturals",
+    "role": "Director",
+    "tagline": "PURE INGREDIENTS, HONEST WORK.",
+    "description": "Directed brand anthem and product storytelling working closely with animal talent, trainers, and natural environments.",
+    "thumbnailUrl": "https://media.christopherfrendo.com/thumbs/directing-redford-naturals.webp",
+    "previewLoopUrl": "https://media.christopherfrendo.com/loops/directing-redford-naturals-loop.mp4",
+    "videoSource": {
+      "type": "r2",
+      "url": "https://media.christopherfrendo.com/masters/directing-redford-naturals-1080p.mp4"
+    }
+  },
+  {
+    "id": "hartwick-fields",
+    "client": "Hartwick Fields",
+    "title": "Hartwick Fields",
+    "role": "Director",
+    "tagline": "ATMOSPHERE & CRAFT.",
+    "description": "Visual narrative blending sweeping exteriors and intimate character moments to anchor the Hartwick Fields campaign.",
+    "thumbnailUrl": "https://media.christopherfrendo.com/thumbs/directing-hartwick-fields.webp",
+    "previewLoopUrl": "https://media.christopherfrendo.com/loops/directing-hartwick-fields-loop.mp4",
+    "videoSource": {
+      "type": "r2",
+      "url": "https://media.christopherfrendo.com/masters/directing-hartwick-fields-1080p.mp4"
+    }
+  }
+]

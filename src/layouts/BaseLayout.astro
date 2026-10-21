@@ -1,0 +1,68 @@
+---
+import Header from '../components/Header.astro';
+import VideoModal from '../components/VideoModal.astro';
+import site from '../data/site.json';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  fullBleed?: boolean;
+}
+
+const {
+  title = `${site.name} | ${site.role}`,
+  description = 'Senior Producer & Director portfolio featuring commercial post-production, VFX, editorial, and broadcast campaigns for Solo Stove, GEICO, CarMax, Papa Johns, and more.',
+  fullBleed = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Rubik:ital,wght@0,300..700;1,300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col bg-black text-white font-sans antialiased">
+    <Header />
+
+    <main class:list={[
+      'flex-1 w-full',
+      !fullBleed && 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
+    ]}>
+      <slot />
+    </main>
+
+    <footer class="relative z-10 bg-black text-white py-10 px-[2.73vw]">
+      <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-display font-normal text-[16px] leading-[1.4em] text-white uppercase tracking-normal">
+          {site.copyright}
+        </p>
+
+        <nav aria-label="Footer navigation" class="flex flex-wrap justify-center gap-6">
+          {site.navigation.map((item) => (
+            <a
+              href={item.href}
+              class="font-menu text-[15px] text-neutral-300 hover:text-white transition"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </footer>
+
+    <VideoModal />
+  </body>
+</html>

@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import directingSpots from '../data/directing.json';
+---
+
+<BaseLayout
+  title="Directing | Christopher Frendo"
+  description="Directing reel and commercial spots by Christopher Frendo, including Wixom Ranch, Surreal Glass Flowers, Redford Naturals, and Hartwick Fields."
+>
+  <section class="pt-12 pb-8 border-b border-neutral-800">
+    <p class="text-xs uppercase tracking-[0.25em] text-neutral-400 mb-2">
+      Commercial & Brand Direction
+    </p>
+    <h1 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-wider text-white">
+      Directing
+    </h1>
+  </section>
+
+  <section class="divide-y divide-neutral-800">
+    {directingSpots.map((spot) => (
+      <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 items-center">
+        <div
+          class="lg:col-span-7 relative aspect-video bg-neutral-900 rounded-lg overflow-hidden group border border-neutral-800/80 shadow-2xl"
+          data-video-container
+          data-preview-loop={spot.previewLoopUrl || ''}
+        >
+          <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-neutral-900 via-neutral-950 to-black pointer-events-none select-none z-0">
+            <span class="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-1">
+              {spot.role}
+            </span>
+            <span class="font-display text-xl sm:text-2xl font-bold uppercase tracking-wider text-neutral-300">
+              {spot.title}
+            </span>
+          </div>
+
+          <video
+            class="hover-loop-video absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 hidden"
+            muted
+            loop
+            playsinline
+            preload="none"
+          ></video>
+
+          <video
+            class="master-video relative z-20 w-full h-full object-cover"
+            controls
+            preload="none"
+            playsinline
+            poster={spot.thumbnailUrl}
+          >
+            <source src={spot.videoSource.url} type="video/mp4" />
+          </video>
+
+          <button
+            type="button"
+            class="open-video-modal absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity bg-black/75 hover:bg-black text-white border border-neutral-700 px-3 py-1.5 rounded text-[11px] uppercase tracking-wider"
+            data-video-type={spot.videoSource.type}
+            data-video-url={spot.videoSource.url}
+            data-video-title={`Directing — ${spot.title}`}
+          >
+            Theater View
+          </button>
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col justify-center space-y-4">
+          <p class="text-xs uppercase tracking-widest text-neutral-400">
+            {spot.role} — "{spot.title}"
+          </p>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase">
+            {spot.tagline}
+          </h2>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            {spot.description}
+          </p>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

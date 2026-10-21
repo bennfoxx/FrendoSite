@@ -1,0 +1,137 @@
+---
+import site from '../data/site.json';
+
+const formAction = import.meta.env.PUBLIC_FORM_ENDPOINT || '/api/contact';
+const web3FormsKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || '';
+---
+
+<section id="contact" class="relative z-10 w-full bg-white text-black px-[2.73vw] py-16 lg:py-24">
+  <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <!-- Left Column: Portrait Image (matches #comp-m2rtf2e15 on christopherfrendo.com) -->
+    <div class="w-full overflow-hidden">
+      <img
+        src={site.contactImageUrl}
+        alt="Christopher Frendo"
+        loading="lazy"
+        class="w-full max-h-[720px] object-cover object-[50%_42%]"
+      />
+    </div>
+
+    <!-- Right Column: CONTACT Heading (66px Bold Familjen Grotesk) + 4-Field Form -->
+    <div class="w-full max-w-xl">
+      <h2 class="font-display font-bold text-[48px] sm:text-[66px] leading-[1em] uppercase text-black mb-8">
+        CONTACT
+      </h2>
+
+      <form
+        id="contact-form"
+        action={formAction}
+        method="POST"
+        class="space-y-5"
+      >
+        {web3FormsKey && <input type="hidden" name="access_key" value={web3FormsKey} />}
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="firstName" class="block font-sans text-[14px] text-[#323232] mb-2">
+              First name*
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              required
+              autocomplete="given-name"
+              class="w-full px-3 py-2.5 bg-white border border-[#767676] rounded-none text-[16px] text-black focus:outline-none focus:border-black transition"
+            />
+          </div>
+
+          <div>
+            <label for="lastName" class="block font-sans text-[14px] text-[#323232] mb-2">
+              Last name*
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              required
+              autocomplete="family-name"
+              class="w-full px-3 py-2.5 bg-white border border-[#767676] rounded-none text-[16px] text-black focus:outline-none focus:border-black transition"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="email" class="block font-sans text-[14px] text-[#323232] mb-2">
+            Email*
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            class="w-full px-3 py-2.5 bg-white border border-[#767676] rounded-none text-[16px] text-black focus:outline-none focus:border-black transition"
+          />
+        </div>
+
+        <div>
+          <label for="message" class="block font-sans text-[14px] text-[#323232] mb-2">
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            class="w-full px-3 py-2.5 bg-white border border-[#767676] rounded-none text-[16px] text-black focus:outline-none focus:border-black transition resize-y"
+          ></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            class="w-full py-3 bg-[#7a7462] hover:bg-[#636053] text-white font-sans text-[16px] leading-[1.4em] transition rounded-none"
+          >
+            Submit
+          </button>
+          <p id="contact-status" class="font-sans text-xs text-neutral-600 mt-3" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('contact-status');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!statusEl) return;
+
+    statusEl.textContent = 'Sending...';
+    statusEl.className = 'font-sans text-xs text-neutral-600 mt-3';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (response.ok) {
+        statusEl.textContent = 'Thanks for reaching out! Your message has been sent.';
+        statusEl.className = 'font-sans text-xs text-emerald-700 mt-3';
+        form.reset();
+      } else {
+        statusEl.textContent = 'Submission endpoint not yet configured — set PUBLIC_FORM_ENDPOINT or deploy Cloudflare Pages Function.';
+        statusEl.className = 'font-sans text-xs text-amber-700 mt-3';
+      }
+    } catch {
+      statusEl.textContent = 'Submission endpoint not yet configured — set PUBLIC_FORM_ENDPOINT or deploy Cloudflare Pages Function.';
+      statusEl.className = 'font-sans text-xs text-amber-700 mt-3';
+    }
+  });
+</script>
